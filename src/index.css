@@ -1,0 +1,106 @@
+/*
+ * App tokens (board + chrome) and the Ionic variables mapped onto them.
+ * Ionic variables are set on `:root.md`, the same selector Ionic's dark
+ * palette uses, so these win just by being imported later.
+ */
+:root {
+  --bg: #f3f4f8;
+  --surface: #ffffff;
+  --surface-2: #eceff5;
+  --text: #1d2330;
+  --text-muted: #667085;
+  --border: #d8dce5;
+  --accent: #2f6fde;
+  --accent-contrast: #ffffff;
+  --accent-soft: rgba(47, 111, 222, 0.12);
+  --danger: #d33b3b;
+
+  /* Board */
+  --grid-thin: #cdd3de;
+  --grid-thick: #343c4d;
+  --digit-given: #161b26;
+  --digit-user: #2563eb;
+  --digit-wrong: #d33b3b;
+  --note: #6b7488;
+  --note-hi: #1d4ed8;
+  --cell-related: #e4eaf6;
+  --cell-same: #cbdaf5;
+  --cell-selected: #b0cbf5;
+  --cell-conflict: #fadede;
+
+  --radius: 12px;
+  --mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+:root.md {
+  --ion-background-color: var(--bg);
+  --ion-background-color-rgb: 243, 244, 248;
+  --ion-text-color: var(--text);
+  --ion-text-color-rgb: 29, 35, 48;
+  --ion-toolbar-background: var(--surface);
+  --ion-item-background: var(--surface);
+  --ion-card-background: var(--surface);
+  --ion-border-color: var(--border);
+
+  --ion-color-primary: #2f6fde;
+  --ion-color-primary-rgb: 47, 111, 222;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #2962c3;
+  --ion-color-primary-tint: #447de1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0e1117;
+    --surface: #161a22;
+    --surface-2: #1d232e;
+    --text: #e5e8ee;
+    --text-muted: #8f98aa;
+    --border: #283040;
+    --accent: #5b9bff;
+    --accent-contrast: #0a1020;
+    --accent-soft: rgba(91, 155, 255, 0.16);
+    --danger: #ff6b6b;
+
+    --grid-thin: #2a3140;
+    --grid-thick: #8a94a8;
+    --digit-given: #f0f2f6;
+    --digit-user: #6ea8ff;
+    --digit-wrong: #ff6b6b;
+    --note: #8a93a6;
+    --note-hi: #a8c8ff;
+    --cell-related: #1f2939;
+    --cell-same: #263a5a;
+    --cell-selected: #2b4a7c;
+    --cell-conflict: #3a1d24;
+  }
+
+  :root.md {
+    --ion-background-color-rgb: 14, 17, 23;
+    --ion-text-color-rgb: 229, 232, 238;
+
+    --ion-color-primary: #5b9bff;
+    --ion-color-primary-rgb: 91, 155, 255;
+    --ion-color-primary-contrast: #0a1020;
+    --ion-color-primary-contrast-rgb: 10, 16, 32;
+    --ion-color-primary-shade: #5088e0;
+    --ion-color-primary-tint: #6ba5ff;
+  }
+}
+
+/* Small mono chips used across screens. */
+.chip {
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.chip.is-danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}

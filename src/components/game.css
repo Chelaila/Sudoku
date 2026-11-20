@@ -1,0 +1,309 @@
+/* ---------- Layout (portrait phone first) ---------- */
+
+.game {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 10px 12px calc(14px + var(--ion-safe-area-bottom, 0px));
+}
+
+/* Pinned to the bottom on tall phones: buttons stay under the thumb. */
+.game__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.status-row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Container queries: digits scale with the board, not with the viewport.
+   The height cap keeps board + controls on one screen on short phones. */
+.game__board {
+  position: relative;
+  container-type: inline-size;
+  width: 100%;
+  max-width: max(260px, calc(100svh - 310px));
+  margin-inline: auto;
+}
+
+/* ---------- Header ---------- */
+
+.header__rating {
+  margin-left: 4px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.timer {
+  padding-inline: 6px 2px;
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Board ---------- */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  aspect-ratio: 1;
+  width: 100%;
+  border: 2px solid var(--grid-thick);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+  touch-action: none; /* drag-to-select instead of scrolling */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--grid-thin);
+  border-bottom: 1px solid var(--grid-thin);
+  font-size: 6.4cqi;
+  line-height: 1;
+  transition: background-color 0.08s;
+}
+
+.cell[data-col='2'],
+.cell[data-col='5'] {
+  border-right: 2px solid var(--grid-thick);
+}
+
+.cell[data-row='2'],
+.cell[data-row='5'] {
+  border-bottom: 2px solid var(--grid-thick);
+}
+
+.cell[data-col='8'] {
+  border-right: 0;
+}
+
+.cell[data-row='8'] {
+  border-bottom: 0;
+}
+
+/* Later rules win: selected > same digit > conflict > row/col/box. */
+.cell.is-related {
+  background: var(--cell-related);
+}
+
+.cell.is-conflict {
+  background: var(--cell-conflict);
+}
+
+.cell.is-same {
+  background: var(--cell-same);
+}
+
+.cell.is-selected {
+  background: var(--cell-selected);
+}
+
+.cell.is-selected::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 2px var(--accent);
+  pointer-events: none;
+}
+
+/* Givens vs. player digits: weight AND color, so it reads in any theme. */
+.cell.is-given .cell__value {
+  color: var(--digit-given);
+  font-weight: 700;
+}
+
+.cell.is-user .cell__value {
+  color: var(--digit-user);
+  font-weight: 450;
+}
+
+.cell.is-wrong .cell__value {
+  color: var(--digit-wrong);
+}
+
+.cell__notes {
+  position: absolute;
+  inset: 5%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  place-items: center;
+  font-size: 2.8cqi;
+  font-weight: 500;
+  color: var(--note);
+}
+
+.cell__notes > span {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 3px;
+}
+
+.cell__notes > .is-highlighted {
+  background: var(--accent-soft);
+  color: var(--note-hi);
+  font-weight: 800;
+}
+
+/* ---------- Pause ---------- */
+
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 2px solid var(--grid-thick);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.pause-overlay p {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.pause-overlay__label {
+  margin-left: 6px;
+}
+
+/* ---------- Toolbar ---------- */
+
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.tool {
+  position: relative;
+  overflow: hidden; /* clips the Ionic ripple */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 4px 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.tool svg {
+  color: var(--text);
+}
+
+.tool:disabled {
+  opacity: 0.4;
+}
+
+.tool.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.tool.is-active svg {
+  color: var(--accent);
+}
+
+.tool__badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.tool.is-active .tool__badge {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* ---------- Number pad ---------- */
+
+.multi-hint {
+  margin: 0;
+  min-height: 1.25em;
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--accent);
+  visibility: hidden; /* keeps its space: no layout jump when it appears */
+}
+
+.multi-hint.is-visible {
+  visibility: visible;
+}
+
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 5px;
+}
+
+.numpad__key {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  padding: 0;
+  aspect-ratio: 2 / 3;
+  max-height: 76px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  font: inherit;
+}
+
+.numpad__digit {
+  font-size: 1.7rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--digit-user);
+}
+
+.numpad.is-note-mode .numpad__digit {
+  font-size: 1.05rem;
+  color: var(--note);
+}
+
+.numpad__left {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+}
+
+.numpad__key.is-done {
+  opacity: 0.35;
+}
