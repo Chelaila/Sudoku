@@ -19,8 +19,9 @@ import type { SelectOption } from '../interfaces/option-label'
 import type { Difficulty } from '../interfaces/puzzle'
 import { formatTime } from '../lib/format-time'
 import { DIFFICULTY_TIERS } from '../puzzles/difficulty-tiers'
-import { PlayIcon } from './icons'
+import { GearIcon, PlayIcon } from './icons'
 import { OptionGroup } from './OptionGroup'
+import { SettingsModal } from './SettingsModal'
 import './menu.css'
 
 const DIFFICULTY_OPTIONS: readonly SelectOption<Difficulty>[] = DIFFICULTY_TIERS.map((tier) => ({
@@ -43,6 +44,7 @@ export function MenuScreen({ onStart, onResume }: MenuScreenProps) {
   const [saved] = useState(loadGame)
   const [difficulty, setDifficulty] = useState<Difficulty>(saved?.state.difficulty ?? 'normal')
   const [mode, setMode] = useState<GameMode>(saved?.state.mode ?? 'assisted')
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
     <IonPage>
@@ -56,9 +58,9 @@ export function MenuScreen({ onStart, onResume }: MenuScreenProps) {
         <p className="menu__subtitle">{LABELS.menu.subtitle}</p>
 
         {saved && (
-          <IonList className="menu__resume" lines="none">
+          <IonList className="highlight-card" lines="none">
             <IonItem button detail onClick={() => onResume(saved)}>
-              <span slot="start" className="menu__resume-icon">
+              <span slot="start" className="highlight-card__icon">
                 <PlayIcon />
               </span>
               <IonLabel>
@@ -71,6 +73,18 @@ export function MenuScreen({ onStart, onResume }: MenuScreenProps) {
             </IonItem>
           </IonList>
         )}
+
+        <IonList className="menu__settings" lines="none">
+          <IonItem button detail onClick={() => setSettingsOpen(true)}>
+            <span slot="start" className="menu__settings-icon">
+              <GearIcon />
+            </span>
+            <IonLabel className="ion-text-wrap">
+              <h2>{LABELS.settings.menuEntry}</h2>
+              <p>{LABELS.settings.menuEntryDetail}</p>
+            </IonLabel>
+          </IonItem>
+        </IonList>
 
         <OptionGroup
           title={LABELS.menu.difficulty}
@@ -88,6 +102,8 @@ export function MenuScreen({ onStart, onResume }: MenuScreenProps) {
           </IonButton>
         </IonToolbar>
       </IonFooter>
+
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </IonPage>
   )
 }

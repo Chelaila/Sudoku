@@ -12,6 +12,9 @@
 
 /* Pinned to the bottom on tall phones: buttons stay under the thumb. */
 .game__controls {
+  --pad-key: min(68px, 17vw);
+  --dpad-key: min(44px, 11vw);
+
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -30,8 +33,12 @@
   position: relative;
   container-type: inline-size;
   width: 100%;
-  max-width: max(260px, calc(100svh - 310px));
+  max-width: max(260px, calc(100svh - 310px * var(--ui-scale)));
   margin-inline: auto;
+}
+
+.game.is-one-hand .game__board {
+  max-width: max(220px, calc(100svh - 430px));
 }
 
 /* ---------- Header ---------- */
@@ -42,6 +49,10 @@
   font-size: 0.72rem;
   font-weight: 400;
   color: var(--text-muted);
+}
+
+:root[data-text-size='xlarge'] .header__rating {
+  display: none; /* leave the room to the difficulty name */
 }
 
 .timer {
@@ -59,7 +70,7 @@
   grid-template-rows: repeat(9, 1fr);
   aspect-ratio: 1;
   width: 100%;
-  border: 2px solid var(--grid-thick);
+  border: var(--line-thick) solid var(--grid-thick);
   border-radius: 8px;
   overflow: hidden;
   background: var(--surface);
@@ -72,21 +83,21 @@
   position: relative;
   display: grid;
   place-items: center;
-  border-right: 1px solid var(--grid-thin);
-  border-bottom: 1px solid var(--grid-thin);
-  font-size: 6.4cqi;
+  border-right: var(--line-thin) solid var(--grid-thin);
+  border-bottom: var(--line-thin) solid var(--grid-thin);
+  font-size: calc(6.4cqi * var(--digit-scale));
   line-height: 1;
   transition: background-color 0.08s;
 }
 
 .cell[data-col='2'],
 .cell[data-col='5'] {
-  border-right: 2px solid var(--grid-thick);
+  border-right: var(--line-thick) solid var(--grid-thick);
 }
 
 .cell[data-row='2'],
 .cell[data-row='5'] {
-  border-bottom: 2px solid var(--grid-thick);
+  border-bottom: var(--line-thick) solid var(--grid-thick);
 }
 
 .cell[data-col='8'] {
@@ -99,19 +110,19 @@
 
 /* Later rules win: selected > same digit > conflict > row/col/box. */
 .cell.is-related {
-  background: var(--cell-related);
+  background-color: var(--cell-related);
 }
 
 .cell.is-conflict {
-  background: var(--cell-conflict);
+  background-color: var(--cell-conflict);
 }
 
 .cell.is-same {
-  background: var(--cell-same);
+  background-color: var(--cell-same);
 }
 
 .cell.is-selected {
-  background: var(--cell-selected);
+  background-color: var(--cell-selected);
 }
 
 .cell.is-selected::after {
@@ -137,6 +148,21 @@
   color: var(--digit-wrong);
 }
 
+/* Mistakes readable without color vision: wavy underline + hatched repeats. */
+:root[data-shape-errors] .cell.is-wrong .cell__value {
+  text-decoration: underline wavy var(--digit-wrong);
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.14em;
+}
+
+:root[data-shape-errors] .cell.is-conflict {
+  background-image: repeating-linear-gradient(
+    135deg,
+    transparent 0 5px,
+    color-mix(in srgb, var(--digit-wrong) 40%, transparent) 5px 8px
+  );
+}
+
 .cell__notes {
   position: absolute;
   inset: 5%;
@@ -144,7 +170,7 @@
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
   place-items: center;
-  font-size: 2.8cqi;
+  font-size: calc(2.8cqi * var(--note-scale));
   font-weight: 500;
   color: var(--note);
 }
@@ -173,7 +199,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  border: 2px solid var(--grid-thick);
+  border: var(--line-thick) solid var(--grid-thick);
   border-radius: 8px;
   background: var(--surface);
 }
@@ -200,6 +226,7 @@
 .tool {
   position: relative;
   overflow: hidden; /* clips the Ionic ripple */
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -211,6 +238,13 @@
   font: inherit;
   font-size: 0.78rem;
   color: var(--text-muted);
+}
+
+.tool > span:not(.tool__badge) {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tool svg {
@@ -306,4 +340,126 @@
 
 .numpad__key.is-done {
   opacity: 0.35;
+}
+
+/* Very large text + both hands: 9 keys no longer fit one row. */
+:root[data-text-size='xlarge'] .is-hand-both .numpad {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+:root[data-text-size='xlarge'] .is-hand-both .numpad__key {
+  aspect-ratio: auto;
+  max-height: none;
+  height: 3.4rem;
+}
+
+/* ---------- One hand: 3x3 pad at the thumb's side ---------- */
+
+.game__controls.is-one-hand {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  align-items: end;
+  gap: 6px 12px;
+  grid-template-areas:
+    'hint hint'
+    'side pad';
+}
+
+.game__controls.is-hand-left {
+  grid-template-areas:
+    'hint hint'
+    'pad side';
+}
+
+.is-one-hand .multi-hint {
+  grid-area: hint;
+}
+
+.is-one-hand .numpad {
+  grid-area: pad;
+  grid-template-columns: repeat(3, var(--pad-key));
+  gap: 6px;
+}
+
+.is-one-hand .numpad__key {
+  aspect-ratio: 1;
+  max-height: none;
+}
+
+.one-hand__side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: calc(var(--dpad-key) * 3 + 8px);
+}
+
+.one-hand__side .toolbar {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.one-hand__side .tool {
+  padding: 9px 2px 6px;
+  font-size: 0.64rem;
+}
+
+.one-hand__side .tool__badge {
+  top: 3px;
+  right: 3px;
+  font-size: 0.5rem;
+}
+
+/* ---------- Direction pad ---------- */
+
+.dpad {
+  display: grid;
+  grid-template-columns: repeat(3, var(--dpad-key));
+  grid-template-rows: repeat(3, var(--dpad-key));
+  grid-template-areas:
+    '. up .'
+    'left . right'
+    '. down .';
+  gap: 4px;
+}
+
+.dpad__key {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+}
+
+.dpad__key--up {
+  grid-area: up;
+}
+
+.dpad__key--down {
+  grid-area: down;
+}
+
+.dpad__key--down svg {
+  transform: rotate(180deg);
+}
+
+.dpad__key--left {
+  grid-area: left;
+}
+
+.dpad__key--left svg {
+  transform: rotate(-90deg);
+}
+
+.dpad__key--right {
+  grid-area: right;
+}
+
+.dpad__key--right svg {
+  transform: rotate(90deg);
 }

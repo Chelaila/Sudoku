@@ -1,21 +1,28 @@
 /*
- * App tokens (board + chrome) and the Ionic variables mapped onto them.
- * Ionic variables are set on `:root.md`, the same selector Ionic's dark
- * palette uses, so these win just by being imported later.
+ * Themes = sets of tokens selected by <html data-theme="..."> (see
+ * settings/apply-settings.ts). Components only read tokens, never colors.
+ * Ionic variables are mapped onto the tokens at the end.
  */
+
+/* ---------- Light (default) ---------- */
 :root {
   --bg: #f3f4f8;
+  --bg-rgb: 243, 244, 248;
   --surface: #ffffff;
   --surface-2: #eceff5;
   --text: #1d2330;
+  --text-rgb: 29, 35, 48;
   --text-muted: #667085;
   --border: #d8dce5;
   --accent: #2f6fde;
+  --accent-rgb: 47, 111, 222;
   --accent-contrast: #ffffff;
+  --accent-contrast-rgb: 255, 255, 255;
+  --accent-shade: #2962c3;
+  --accent-tint: #447de1;
   --accent-soft: rgba(47, 111, 222, 0.12);
   --danger: #d33b3b;
 
-  /* Board */
   --grid-thin: #cdd3de;
   --grid-thick: #343c4d;
   --digit-given: #161b26;
@@ -28,68 +35,189 @@
   --cell-selected: #b0cbf5;
   --cell-conflict: #fadede;
 
+  /* Size + line knobs (overridden by data-text-size / data-thick-lines). */
+  --ui-scale: 1;
+  --digit-scale: 1;
+  --note-scale: 1;
+  --line-thin: 1px;
+  --line-thick: 2px;
+
   --radius: 12px;
   --mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
 }
 
+/* ---------- Dark ---------- */
+:root[data-theme='dark'] {
+  --bg: #0e1117;
+  --bg-rgb: 14, 17, 23;
+  --surface: #161a22;
+  --surface-2: #1d232e;
+  --text: #e5e8ee;
+  --text-rgb: 229, 232, 238;
+  --text-muted: #8f98aa;
+  --border: #283040;
+  --accent: #5b9bff;
+  --accent-rgb: 91, 155, 255;
+  --accent-contrast: #0a1020;
+  --accent-contrast-rgb: 10, 16, 32;
+  --accent-shade: #5088e0;
+  --accent-tint: #6ba5ff;
+  --accent-soft: rgba(91, 155, 255, 0.16);
+  --danger: #ff6b6b;
+
+  --grid-thin: #2a3140;
+  --grid-thick: #8a94a8;
+  --digit-given: #f0f2f6;
+  --digit-user: #6ea8ff;
+  --digit-wrong: #ff6b6b;
+  --note: #8a93a6;
+  --note-hi: #a8c8ff;
+  --cell-related: #1f2939;
+  --cell-same: #263a5a;
+  --cell-selected: #2b4a7c;
+  --cell-conflict: #3a1d24;
+}
+
+/* ---------- Paper: warm newspaper look, less glare ---------- */
+:root[data-theme='paper'] {
+  --bg: #f2ead7;
+  --bg-rgb: 242, 234, 215;
+  --surface: #fbf7ec;
+  --surface-2: #ede3cc;
+  --text: #2b2418;
+  --text-rgb: 43, 36, 24;
+  --text-muted: #6e6250;
+  --border: #d6c8a8;
+  --accent: #1f4f9e;
+  --accent-rgb: 31, 79, 158;
+  --accent-contrast: #ffffff;
+  --accent-contrast-rgb: 255, 255, 255;
+  --accent-shade: #1b468b;
+  --accent-tint: #3561a8;
+  --accent-soft: rgba(31, 79, 158, 0.12);
+  --danger: #b3261e;
+
+  --grid-thin: #cbbd9c;
+  --grid-thick: #3d3326;
+  --digit-given: #1f1a12;
+  --digit-user: #1f4f9e;
+  --digit-wrong: #b3261e;
+  --note: #6e6250;
+  --note-hi: #1f4f9e;
+  --cell-related: #efe5cc;
+  --cell-same: #e0d3ae;
+  --cell-selected: #c8d6ee;
+  --cell-conflict: #f2d2c6;
+}
+
+/* ---------- Contrast light: pure black on white ---------- */
+:root[data-theme='contrast-light'] {
+  --bg: #ffffff;
+  --bg-rgb: 255, 255, 255;
+  --surface: #ffffff;
+  --surface-2: #ececec;
+  --text: #000000;
+  --text-rgb: 0, 0, 0;
+  --text-muted: #1f1f1f;
+  --border: #000000;
+  --accent: #0033cc;
+  --accent-rgb: 0, 51, 204;
+  --accent-contrast: #ffffff;
+  --accent-contrast-rgb: 255, 255, 255;
+  --accent-shade: #002db4;
+  --accent-tint: #1a47d1;
+  --accent-soft: rgba(0, 51, 204, 0.14);
+  --danger: #b00000;
+
+  --grid-thin: #555555;
+  --grid-thick: #000000;
+  --digit-given: #000000;
+  --digit-user: #0033cc;
+  --digit-wrong: #b00000;
+  --note: #222222;
+  --note-hi: #0033cc;
+  --cell-related: #e3e9ff;
+  --cell-same: #ffe36b;
+  --cell-selected: #9db6ff;
+  --cell-conflict: #ffc4c4;
+}
+
+/* ---------- Contrast dark: black, white and yellow, no glare ---------- */
+:root[data-theme='contrast-dark'] {
+  --bg: #000000;
+  --bg-rgb: 0, 0, 0;
+  --surface: #000000;
+  --surface-2: #1a1a1a;
+  --text: #ffffff;
+  --text-rgb: 255, 255, 255;
+  --text-muted: #e6e6e6;
+  --border: #ffffff;
+  --accent: #ffd60a;
+  --accent-rgb: 255, 214, 10;
+  --accent-contrast: #000000;
+  --accent-contrast-rgb: 0, 0, 0;
+  --accent-shade: #e0bc09;
+  --accent-tint: #ffda23;
+  --accent-soft: rgba(255, 214, 10, 0.2);
+  --danger: #ff6b6b;
+
+  --grid-thin: #8c8c8c;
+  --grid-thick: #ffffff;
+  --digit-given: #ffffff;
+  --digit-user: #ffd60a;
+  --digit-wrong: #ff6b6b;
+  --note: #e6e6e6;
+  --note-hi: #ffd60a;
+  --cell-related: #10224a;
+  --cell-same: #4d3f00;
+  --cell-selected: #1f4fbf;
+  --cell-conflict: #5c0f0f;
+}
+
+/* ---------- Sizes ---------- */
+:root[data-text-size='large'] {
+  --ui-scale: 1.15;
+  --digit-scale: 1.12;
+  --note-scale: 1.15;
+}
+
+:root[data-text-size='xlarge'] {
+  --ui-scale: 1.3;
+  --digit-scale: 1.22;
+  --note-scale: 1.3;
+}
+
+/* Ionic sizes its text in rem, so this one value scales the whole UI. */
+html {
+  font-size: calc(16px * var(--ui-scale));
+}
+
+:root[data-thick-lines] {
+  --line-thin: 1.5px;
+  --line-thick: 3.5px;
+}
+
+/* ---------- Ionic mapped onto the tokens ---------- */
 :root.md {
   --ion-background-color: var(--bg);
-  --ion-background-color-rgb: 243, 244, 248;
+  --ion-background-color-rgb: var(--bg-rgb);
   --ion-text-color: var(--text);
-  --ion-text-color-rgb: 29, 35, 48;
+  --ion-text-color-rgb: var(--text-rgb);
   --ion-toolbar-background: var(--surface);
   --ion-item-background: var(--surface);
   --ion-card-background: var(--surface);
   --ion-border-color: var(--border);
+  --ion-item-border-color: var(--border);
 
-  --ion-color-primary: #2f6fde;
-  --ion-color-primary-rgb: 47, 111, 222;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #2962c3;
-  --ion-color-primary-tint: #447de1;
+  --ion-color-primary: var(--accent);
+  --ion-color-primary-rgb: var(--accent-rgb);
+  --ion-color-primary-contrast: var(--accent-contrast);
+  --ion-color-primary-contrast-rgb: var(--accent-contrast-rgb);
+  --ion-color-primary-shade: var(--accent-shade);
+  --ion-color-primary-tint: var(--accent-tint);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0e1117;
-    --surface: #161a22;
-    --surface-2: #1d232e;
-    --text: #e5e8ee;
-    --text-muted: #8f98aa;
-    --border: #283040;
-    --accent: #5b9bff;
-    --accent-contrast: #0a1020;
-    --accent-soft: rgba(91, 155, 255, 0.16);
-    --danger: #ff6b6b;
-
-    --grid-thin: #2a3140;
-    --grid-thick: #8a94a8;
-    --digit-given: #f0f2f6;
-    --digit-user: #6ea8ff;
-    --digit-wrong: #ff6b6b;
-    --note: #8a93a6;
-    --note-hi: #a8c8ff;
-    --cell-related: #1f2939;
-    --cell-same: #263a5a;
-    --cell-selected: #2b4a7c;
-    --cell-conflict: #3a1d24;
-  }
-
-  :root.md {
-    --ion-background-color-rgb: 14, 17, 23;
-    --ion-text-color-rgb: 229, 232, 238;
-
-    --ion-color-primary: #5b9bff;
-    --ion-color-primary-rgb: 91, 155, 255;
-    --ion-color-primary-contrast: #0a1020;
-    --ion-color-primary-contrast-rgb: 10, 16, 32;
-    --ion-color-primary-shade: #5088e0;
-    --ion-color-primary-tint: #6ba5ff;
-  }
-}
-
-/* Small mono chips used across screens. */
+/* Small chips used across screens. */
 .chip {
   padding: 3px 10px;
   border: 1px solid var(--border);

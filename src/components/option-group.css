@@ -1,0 +1,67 @@
+.option-group {
+  margin-top: 8px;
+}
+
+.option-group ion-list-header {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Ionic truncates radio/toggle labels with an ellipsis; descriptions must wrap. */
+.option-label::part(label) {
+  white-space: normal;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-block: 8px;
+}
+
+.option__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.option__name {
+  font-weight: 700;
+}
+
+.option__badge {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.option__desc {
+  font-size: 0.84rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+/* Accent-framed single row: "continue game", "easy view" preset. */
+.highlight-card {
+  margin: 12px 16px 0;
+  padding: 0;
+  border: 1.5px solid var(--accent);
+  border-radius: var(--radius);
+  overflow: hidden;
+  --ion-item-background: var(--accent-soft);
+}
+
+.highlight-card h2 {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.highlight-card__icon {
+  display: grid;
+  color: var(--accent);
+}
+
+.settings__reset {
+  margin: 12px 16px calc(16px + var(--ion-safe-area-bottom, 0px));
+}
